@@ -34,6 +34,12 @@ let players =
 
    router.post('/players', function (req, res) {
     let add = req.body
+    for(let i=0; i<players.length; i++){
+    let a=players[i]
+    if (a.name===add.name){
+    res.send("This player is already exist in team")
+    }
+    }
     players.push(add)
 
        //LOGIC WILL COME HERE
