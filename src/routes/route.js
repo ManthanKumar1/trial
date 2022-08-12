@@ -1,43 +1,43 @@
 const express = require('express');
 const router = express.Router();
 
-let players =
-   [
-       {
-           "name": "manish",
-           "dob": "1/1/1995",
-           "gender": "male",
-           "city": "jalandhar",
-           "sports": [
-               "swimming"
-           ]
-       },
-       {
-           "name": "gopal",
-           "dob": "1/09/1995",
-           "gender": "male",
-           "city": "delhi",
-           "sports": [
-               "soccer"
-           ],
-       },
-       {
-           "name": "lokesh",
-           "dob": "1/1/1990",
-           "gender": "male",
-           "city": "mumbai",
-           "sports": [
-               "soccer"
-           ],
-       },
-   ]
+let person = [
+    {
+        name : "PK",
+        age : 10,
+        votingStatus : false
+    },
+    {
+        name : "SK",
+        age : 20,
+        votingStatus : false
+    },
+    {
+        name : "AA",
+        age : 70,
+        votingStatus : false
+    },
+    {
+        name : "SC",
+        age : 5,
+        votingStatus : false
+    },
+    {
+        name : "HO",
+        age : 40,
+        votingStatus : false
+    }
+]
 
-   router.post('/players', function (req, res) {
-    let add = req.body
-    players.push(add)
-
-       //LOGIC WILL COME HERE
-       res.send(  { data: players , status: true }  )
-   })
-  
+router.post("/voting", function(req,res){
+    let votingAge = req.query.age
+    let age = []
+    for (i=0; i<person.length; i++){
+        if(votingAge<person[i].age){
+            person[i].votingStatus = true
+            age.push(person[i])
+        }
+    }
+    res.send({data: age, status: true})
+})
 module.exports = router;
