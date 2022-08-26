@@ -1,5 +1,8 @@
-const { count } = require("console")
-const BookModel = require("../models/bookModel")
+
+const OrderModel = require("../models/orderModel")
+const mid = require("../middlewares/commonMiddlewares")
+const userModel = require("../models/userModel")
+const productModel = require("../models/productModel")
 
 const createBook= async function (req, res) {
     let data= req.body
@@ -8,7 +11,34 @@ const createBook= async function (req, res) {
     res.send({msg: savedData})
 }
 
+const createOrder = async function (req, res, next){
+    let data = req.body
+    let header = req.headers.isfreeappuser
+    
+    let checkUser = await userModel.findById({_id: data.userId})
+    if(!checkUser){
+        return res.send({msg: "user id is invalid"})
+    }
+    let checkProduct = await productModel.findById({_id: data.productId})
+    if (!checkProduct){
+        return res.send({msg: "product id is invalid"})
+    }
 
+    if(checkUser['balance']>=data['amount']){
+        let update = await OrderModel.updateMany(
+        {isFreeAppUser: false},
+        {$set: {amount: userModel['balance'] - productModel['price']}}
+        )
+    } else if (checkUser['balance']<data['amount']){
+        res.send({msg: "user doesn't have enough balance"})
+    } else if (header == true){
+        next()
+    }
+    console.log({data: data, isFreeAppUser: header})
+    let final = await OrderModel.create(data)
+    res.send("see terminal")
+
+}
 
 
 
@@ -77,3 +107,5 @@ module.exports.getBooksData = getBooksData
 module.exports.updateBooks = updateBooks
 module.exports.deleteBooks = deleteBooks
 module.exports.totalSalesPerAuthor = totalSalesPerAuthor
+
+module.exports.createOrder = createOrder
