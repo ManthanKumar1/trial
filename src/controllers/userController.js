@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/userModel");
+const userModel = require("../models/user");
 
 /*
   Read all the comments multiple times to understand why we are doing what we are doing in login api and getUserData api
