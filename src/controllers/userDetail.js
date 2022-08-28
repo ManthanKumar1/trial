@@ -91,7 +91,11 @@ let deleteUser = async function (req, res){
     if (!userDelete) {
         return res.send("No such user exists in database");
       }
-    let deleteUser = await user.findOne({isDeleted: true})
+    let deleteUser = await user.findOneAndUpdate(
+        {_id: userId},
+        {isDeleted: true},
+        {new:true}
+        )
     return res.send({status: true, data: deleteUser})
 
 }
