@@ -18,4 +18,4 @@ let userSchema = new mongoose.Schema ({
 }, {timestamps: true})
 
 
-module.exports = mongoose.model('userJWT', userSchema)
+module.exports = mongoose.model('userJWT-authorisation', userSchema)
