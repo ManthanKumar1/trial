@@ -8,17 +8,6 @@ router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
-router.post("/users", userController.createUser  )
-
-router.post("/login", userController.loginUser)
-
-router.get("/users/:userId", userController.getUserData)
-
-router.put("/users/:userId", userController.updateUser)
-
-
-// Assignment
-
 router.post("/users", userData.createUser)
 
 router.post("/login", userData.loginUser)
