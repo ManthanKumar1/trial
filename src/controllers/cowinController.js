@@ -1,85 +1,93 @@
 let axios = require("axios")
 
+// Question 1
 
-let getStates = async function (req, res) {
-
-    try {
-        let options = {
-            method: 'get',
-            url: 'https://cdn-api.co-vin.in/api/v2/admin/location/states'
-        }
-        let result = await axios(options);
-        console.log(result)
-        let data = result.data
-        res.status(200).send({ msg: data, status: true })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
-}
-
-
-let getDistricts = async function (req, res) {
-    try {
-        let id = req.params.stateId
-        let options = {
-            method: "get",
-            url: `https://cdn-api.co-vin.in/api/v2/admin/location/districts/${id}`
-        }
-        let result = await axios(options);
-        console.log(result)
-        let data = result.data
-        res.status(200).send({ msg: data, status: true })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
-}
-
-let getByPin = async function (req, res) {
-    try {
-        let pin = req.query.pincode
+try {
+    let district = async function (req, res){
+        let id = req.query["district_id"]
         let date = req.query.date
-        console.log(`query params are: ${pin} ${date}`)
-        var options = {
+        let options = {
             method: "get",
-            url: `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pin}&date=${date}`
+            url: `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${id}&date=${date}`
         }
-        let result = await axios(options)
-        console.log(result.data)
-        res.status(200).send({ msg: result.data })
+        let solution = await axios(options)
+        res.status(200).send({data: solution.data})
     }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
+} catch (error) {
+    res.status(500).send({msg: error.message})
 }
 
-let getOtp = async function (req, res) {
+// Question 2
+    // Part 1 & 2 
+
     try {
-        let blahhh = req.body
-        
-        console.log(`body is : ${blahhh} `)
-        var options = {
-            method: "post",
-            url: `https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP`,
-            data: blahhh
+        let temp = async function (req, res){
+            let place = req.query.q
+            let id = req.query.appid
+            let options = {
+                method: "get",
+                url: `http://api.openweathermap.org/data/2.5/weather?q=${place}&appid=${id}`
+            }
+            let solution = await axios(options)
+            let result = solution.data
+            res.status(200).send({data: result})
         }
+    } catch (error) {
+        res.status(500).send({msg: error.message})
+    }
 
-        let result = await axios(options)
-        console.log(result.data)
-        res.status(200).send({ msg: result.data })
+
+// Part 3
+
+try {
+    let allCities = async function(req, res){
+        let id = req.query.appid
+        let cities = [ "Bengaluru","Mumbai", "Delhi", "Kolkata", "Chennai", "London", "Moscow"]
+        let arr = []
+    
+        for (index = 0; index<cities.length; index++){
+            let temp = {city: cities[index]}
+    
+            let options = {
+                method: "get",
+                url: `http://api.openweathermap.org/data/2.5/weather?q=${cities[index]}&appid=${id}`
+            }
+            let solution = await axios(options)
+            temp.temp = solution.data.main.temp
+            arr.push(temp)
+        }
+    
+        let arrange = arr.sort(function(a,b){return a.temp - b.temp})
+    
+        res.status(200).send({data: arrange})
     }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
+} catch (error) {
+    res.status(500).send({msg: error.message})
 }
 
 
-module.exports.getStates = getStates
-module.exports.getDistricts = getDistricts
-module.exports.getByPin = getByPin
-module.exports.getOtp = getOtp
+// Question 3
+
+try {
+    let meme = async function(req, res){
+        let id = req.query["template_id"]
+        let msg = req.query.text0
+        let name = req.query.username
+        let password = req.query.password
+        let options = {
+            method: "post",
+            url: `https://api.imgflip.com/caption_image?template_id=${id}&text0=${msg}&username=${name}&password=${password}`
+        }
+        let solution = await axios(options)
+        let result = solution.data
+        res.status(200).send({data:result})
+    }
+} catch (error) {
+    res.status(500).send({msg: error.message})
+}
+
+
+module.exports.district = district
+module.exports.temp = temp
+module.exports.allCities = allCities
+module.exports.meme = meme

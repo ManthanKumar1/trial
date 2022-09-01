@@ -8,15 +8,15 @@ router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
 
+// Assignment
 
-router.get("/cowin/states", CowinController.getStates)
-router.get("/cowin/districtsInState/:stateId", CowinController.getDistricts)
-router.get("/cowin/getByPin", CowinController.getByPin)
+router.get("/cowin/district", CowinController.district)
 
-router.post("/cowin/getOtp", CowinController.getOtp)
+router.post("/meme", CowinController.meme)
 
-// WRITE A GET API TO GET THE LIST OF ALL THE "vaccination sessions by district id" for any given district id and for any given date
+router.get("/temp", CowinController.temp)
 
+router.get("/cities", CowinController.allCities)
 
 
 module.exports = router;
