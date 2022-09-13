@@ -6,8 +6,8 @@ const regexEmail = new RegExp(/\S+@\S+\.\S+/)
 const regexPassword = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
 
 const isValid = function(value){
-    if(!value ||typeof value != 'string'|| typeof value === 'undefined' || value === null || value.trim().length === 0) return true
-    return false
+    if(!value ||typeof value != 'string'|| typeof value === 'undefined' || value === null || value.trim().length === 0) return false
+    return true
 }
 
 // Create Author Validation
@@ -19,23 +19,23 @@ if (Object.keys(data).length == 0) {
     return res.status(400).send({ status: false, msg: "all fields are required" })
 }
 
-if (isValid(data.fname)) {
+if (!isValid(data.fname)) {
     return res.status(400).send({ status: false, msg: "fname is only alphabetic" })
 }
 
-if (isValid(data.lname)) {
+if (!isValid(data.lname)) {
     return res.status(400).send({ status: false, msg: "lname is only alphabetic" })
 }
 
-if (isValid(data.title) || data.title != "Mr" && data.title != "Mrs" && data.title != "Miss") {
+if (!isValid(data.title) || data.title != "Mr" && data.title != "Mrs" && data.title != "Miss") {
     return res.status(400).send({ status: false, msg: "Title can only be Mr, Mrs or Miss" })
 }
 
-if (isValid(data.email) || !data.email.match(regexEmail)) {
+if (!isValid(data.email) || !data.email.match(regexEmail)) {
     return res.status(400).send({ status: false, msg: "Invalid Email" })
 }
 
-if (isValid(data.password) || !data.password.match(regexPassword)) {
+if (!isValid(data.password) || !data.password.match(regexPassword)) {
     return res.status(400).send({ status: false, msg: "Minimum eight characters, at least one letter and one number" })
 }
 
