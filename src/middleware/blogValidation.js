@@ -4,7 +4,8 @@ const blogController = require("../controllers/blogController")
 const regexCharAndNum = new RegExp(/^[a-z\d\-_\s]+$/i) 
 
 const isValid = function(value){
-    if(!value ||typeof value != 'string'|| typeof value === 'undefined' || value === null || value.trim().length === 0) return false
+    if(!value || typeof value === "undefined" || value === null || typeof value != 'string') return false
+    if(typeof value === "string" || value.trim().length === 0 ) return false
     return true
 }
 
