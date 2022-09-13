@@ -10,11 +10,11 @@ const createBlog = async function (req, res) {
         let data = req.body
 
         if (!data.authorId) {
-            res.status(400).send({ status: false, msg: "Author id is required and must be valid" })
+            return res.status(400).send({ status: false, msg: "Author id is required and must be valid" })
         }
         const authorCheck = await AuthorModel.findOne({ _id: req.body.authorId })
         if (!authorCheck) {
-            res.status(404).send({ status: false, msg: "No such data found" })
+            return res.status(404).send({ status: false, msg: "No such data found" })
         }
         if (data.isPublished == true){
             data.publishedAt = Date.now()
@@ -37,10 +37,10 @@ const getBlog = async function (req, res) {
         if (blogs.length == 0) {
             return res.status(404).send({ status: false })
         }
-        return res.status(200).send({ status: true, data: blogs })
+        res.status(200).send({ status: true, data: blogs })
 
     } catch (error) {
-        return res.status(500).send({ status: false, msg: error.message })
+        res.status(500).send({ status: false, msg: error.message })
     }
 }
 
@@ -76,14 +76,14 @@ const deleteBlog = async function (req, res) {
     try {
         let id = req.params.blogId
         if (!id) {
-            res.status(400).send({ msg: "id is mandatory" })
+            return res.status(400).send({ msg: "id is mandatory" })
         }
         let checkId = await blogModel.findById(id)
         if (!checkId) {
-            res.status(404).send({ msg: "id is incorrect" })
+            return res.status(404).send({ msg: "id is incorrect" })
         }
         if (checkId.isDeleted == true) {
-            res.status(404).send({ status: false, msg: "blog is already deleted" })
+            return res.status(404).send({ status: false, msg: "blog is already deleted" })
         }
         let checkDelete = await blogModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } }, { new: true })
         res.status(200).send({ status: true })

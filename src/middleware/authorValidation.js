@@ -6,7 +6,8 @@ const regexEmail = new RegExp(/\S+@\S+\.\S+/)
 const regexPassword = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
 
 const isValid = function(value){
-    if(!value ||typeof value != 'string'|| typeof value === 'undefined' || value === null || value.trim().length === 0) return false
+    if(!value || typeof value === "undefined" || value === null || typeof value != 'string') return false
+    if(typeof value === "string" || value.trim().length === 0 ) return false
     return true
 }
 
