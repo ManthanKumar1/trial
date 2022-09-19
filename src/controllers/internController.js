@@ -4,6 +4,7 @@ const { stringChecking, isvalidEmail, isvalidMobile } = require("../validators/v
 
 
 const createIntern = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         let data = req.body
 
@@ -28,7 +29,7 @@ const createIntern = async function (req, res) {
 
 
         if (!stringChecking(collegeName)) return res.status(400).send({ status: false, message: "collegeName must be present and have non empty string" })
-        const college = await collegeModel.findOne({ fullName: collegeName })
+        const college = await collegeModel.findOne({ name: collegeName })
         if (!college) return res.status(404).send({ status: false, message: "college Name not found" })
         entries.collegeId = college._id
 
@@ -43,6 +44,7 @@ const createIntern = async function (req, res) {
 }
 
 const getIntern = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         const filter = req.query
         if(filter.collegeName && Object.keys(filter).length === 1){
