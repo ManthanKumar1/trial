@@ -11,12 +11,7 @@ const createBook = async function (req, res) {
         let data = req.body;
         let { title, excerpt, ISBN, category, reviews, subcategory, releasedAt, userId, isDeleted } = data;
 
-        let decodedId = req.token.userId
-        if (decodedId !== userId) {
-            
-            return res.status(403).send({ status: false, msg: "unauthorised access" })
-        }
-
+        
 
         if (Object.keys(data).length == 0) {
             return res.status(400).send({ status: false, msg: "please provide some data to create user" })
@@ -24,9 +19,16 @@ const createBook = async function (req, res) {
         if (!isValid(userId)) {
             return res.status(400).send({ status: false, msg: "please provide userId" })
         }
+
         if (!isValidObjectId(userId)) {
             return res.status(400).send({ status: false, msg: "please provide  valid userId" })
         }
+        let decodedId = req.token.userId
+        if (decodedId !== userId) {
+            
+            return res.status(403).send({ status: false, msg: "unauthorised access" })
+        }
+
         let checkUser = await userModel.findById(userId)
         if (!checkUser) return res.status(404).send({ status: false, msg: "userId not found" })
         if (!isValid(title)) {
@@ -86,11 +88,17 @@ const getBooks = async function (req, res) {
             filterBook["userId"] = userId
         }
         if (category) {
+            if (!isValid(category)) {
+                return res.status(400).send({ status: false, message: "Invalid category" })
+            }
             filterBook["category"] = category
         }
         if (subcategory) {
-            const subcategoryArr = subcategory.trim().split(',').map(subcategory => subcategory.trim())
-            filterBook['subcategory'] = { $all: subcategoryArr }
+            if (!isValid(subcategory)) {
+                return res.status(400).send({ status: false, message: "Invalid subcategory" })
+            }
+            
+            filterBook['subcategory'] = subcategory
         }
         let returnBooks = await bookModel.find(filterBook).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).sort({ title: 1 })
         if (Object.keys(returnBooks).length == 0) {
