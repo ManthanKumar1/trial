@@ -42,6 +42,16 @@ const authorisation = async function (req, res, next){
         return res.status(500).send({status: false, msg: error.message})
     }
 }
+// const authorisation = async (req, res, next) => {
+
+//     let token = req.headers["x-api-key"];
+//     if (!token) return res.status(401).send({ status: false, msg: "token must be present in the request header" })//uthiticaton
+//     let decodedtoken = jwt.verify(token, "Project-3/group65")
+//     if (decodedtoken.userId !== req.body.userId)             
+//     else return res.status(401).send({ status: false, msg: "you are not authorised!!!" });
+//     return next()
+
+// };
 
 // let decodedId = req.token.userId
 
