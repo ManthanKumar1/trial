@@ -1,6 +1,6 @@
 const userModel = require('../models/userModel')
 const jwt = require('jsonwebtoken')
-const { isValid, regexEmail, regexPassword, regexName, regexPhone, regexPincode } = require("../validators/validator")
+const { isValid, regexEmail, regexPassword, regexName, regexPhone, regexPincode, checkObject } = require("../validators/validator")
 
 
 const createUser = async function (req, res) {
@@ -46,8 +46,11 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, msg: "please provide valid password" })
         }
         if (address) {
-            if(Object.keys(address).length===0){
-                return res.status(400).send({status:false, msg: " please provide somthing in address"})
+            if (!checkObject(address)){
+                return res.status(400).send({ status: false, msg: "please provide address" })
+            }
+            if (Object.keys(address).length === 0) {
+                return res.status(400).send({ status: false, msg: " please provide somthing in address" })
             }
             if (!isValid(address.street || address.city || address.pincode)) {
                 return res.status(400).send({ status: false, msg: "please provide address in proper format" })
