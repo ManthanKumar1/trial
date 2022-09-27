@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 const reviewModel = require('../models/reviewModel')
 const bookModel = require('../models/bookModel')
 const { isValid, isValidObjectId, onlyNumbers, regexName, regexDate } = require("../validators/validator")
