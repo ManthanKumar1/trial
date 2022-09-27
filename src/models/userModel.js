@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
+
 const userSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
         enum: ["Mr", "Mrs", "Miss"],
         trim: true
-
     },
     name: {
         type: String,
@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-
     },
     address: {
         street: {
@@ -43,9 +42,7 @@ const userSchema = new mongoose.Schema({
             type: String,
             trim: true
         }
-    },
-
-
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('P3-User', userSchema)

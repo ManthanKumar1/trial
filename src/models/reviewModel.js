@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
+
 const reviewSchema = new mongoose.Schema({
     bookId: {
         type: ObjectId,
@@ -16,7 +17,7 @@ const reviewSchema = new mongoose.Schema({
     reviewedAt: {
         type: Date,
         required: true,
-
+        trim: true
     },
     rating: {
         type: Number,
@@ -25,6 +26,7 @@ const reviewSchema = new mongoose.Schema({
     },
     review: {
         type: String,
+        trim: true
     },
     isDeleted: {
         type: Boolean,

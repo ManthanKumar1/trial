@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId
+
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -37,6 +38,7 @@ const bookSchema = new mongoose.Schema({
     reviews: {
         type: Number,
         default: 0,
+        trim: true
     },
     deletedAt: {
         type: Date,
@@ -48,9 +50,9 @@ const bookSchema = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
-        required: true
-    },
-
+        required: true,
+        trim: true
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('P3-Book', bookSchema)

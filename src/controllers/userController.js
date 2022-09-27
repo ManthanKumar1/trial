@@ -10,18 +10,18 @@ const createUser = async function (req, res) {
         if (Object.keys(data).length == 0) {
             return res.status(400).send({ status: false, msg: "please provide some data to create user" })
         }
-        
+
         if (!isValid(title) || title != 'Mr' && title != 'Mrs' && title != 'Miss') {
             return res.status(400).send({ status: false, msg: "please provide title in Mr, Mrs, Miss" })
         }
-        
+
         if (!isValid(name)) {
             return res.status(400).send({ status: false, msg: "please provide name in proper format" })
         }
         if (!regexName.test(name)) {
             return res.status(400).send({ status: false, msg: "please provide valid name" })
         }
-        
+
         if (!isValid(phone)) {
             return res.status(400).send({ status: false, msg: "please provide phone in proper format" })
         }
@@ -32,7 +32,7 @@ const createUser = async function (req, res) {
         if (duplicatePhone) {
             return res.status(400).send({ status: false, msg: "phone number is already registered" })
         }
-        
+
         if (!isValid(email)) {
             return res.status(400).send({ status: false, msg: "please provide email in proper format" })
         }
@@ -43,16 +43,16 @@ const createUser = async function (req, res) {
         if (duplicateEmail) {
             return res.status(400).send({ status: false, msg: "email is already registered" })
         }
-        
+
         if (!isValid(password)) {
             return res.status(400).send({ status: false, msg: "please provide password in proper format" })
         }
         if (!regexPassword.test(password)) {
             return res.status(400).send({ status: false, msg: "please provide valid password" })
         }
-        
+
         if (address) {
-            if (!checkObject(address)){
+            if (!checkObject(address)) {
                 return res.status(400).send({ status: false, msg: "please provide address" })
             }
             if (Object.keys(address).length === 0) {
@@ -61,11 +61,16 @@ const createUser = async function (req, res) {
             if (!isValid(address.street || address.city || address.pincode)) {
                 return res.status(400).send({ status: false, msg: "please provide address in proper format" })
             }
-            if (!regexName.test(address.city)) {
-                return res.status(400).send({ status: false, msg: "please provide valid city" })
+
+            if (address.city) {
+                if (!regexName.test(address.city)) {
+                    return res.status(400).send({ status: false, msg: "please provide valid city" })
+                }
             }
-            if (!regexPincode.test(address.pincode)) {
-                return res.status(400).send({ status: false, msg: "please provide valid pincode" })
+            if (address.pincode) {
+                if (!regexPincode.test(address.pincode)) {
+                    return res.status(400).send({ status: false, msg: "please provide valid pincode" })
+                }
             }
         }
 
@@ -80,27 +85,27 @@ const loginUser = async function (req, res) {
     try {
         let email = req.body.email
         let password = req.body.password
-        
-        if(Object.keys(req.body).length === 0){
-            return res.status(400).send({status: false, msg: "please provide something to login"})
+
+        if (Object.keys(req.body).length === 0) {
+            return res.status(400).send({ status: false, msg: "please provide something to login" })
         }
-        
+
         if (!isValid(email)) {
             return res.status(400).send({ status: false, data: "please enter email" })
         }
-        if (!regexEmail.test(email)){ 
+        if (!regexEmail.test(email)) {
             return res.status(400).send({ status: false, data: "please enter valid email" })
         }
 
-        if(!isValid(password)){
-            return res.status(400).send({status: false, msg: "please enter password"})
+        if (!isValid(password)) {
+            return res.status(400).send({ status: false, msg: "please enter password" })
         }
         if (!regexPassword.test(password)) {
             return res.status(400).send({ status: false, data: "please enter valid password" })
         }
 
         const login = await userModel.findOne({ email: email, password: password })
-        
+
         if (!login) {
             return res.status(404).send({ status: false, message: "email or password is incorrect" })
         } else {
