@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const aws = require('../aws')
 const userController = require('../controllers/userController')
 const bookController = require('../controllers/bookController')
 const reviewController = require('../controllers/reviewController')
@@ -35,6 +36,11 @@ router.post("/books/:bookId/review", reviewController.createReview)
 router.put("/books/:bookId/review/:reviewId", reviewController.updateReview)
 
 router.delete("/books/:bookId/review/:reviewId", reviewController.deleteReview)
+
+
+// AWS
+
+router.post("/write-file-aws", aws.awsLink)
 
 
 

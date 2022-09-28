@@ -1,11 +1,14 @@
 const express = require('express')
 const route = require('./routes/route.js')
 const mongoose = require('mongoose')
+const multer = require('multer')
+const { AppConfig } = require('aws-sdk')
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+app.use(multer().any())
 mongoose.connect("mongodb+srv://rahulravidas024:2iYJiS3c54qnkGXA@cluster0.emr6keu.mongodb.net/group63Database", {
     useNewUrlParser: true
 })

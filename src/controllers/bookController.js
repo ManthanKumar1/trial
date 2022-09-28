@@ -7,7 +7,7 @@ const { isValid, isValidObjectId, regexIsbn, regexDate } = require("../validator
 const createBook = async function (req, res) {
     try {
         let data = req.body;
-        let { title, excerpt, userId, ISBN, category, subcategory, reviews, deletedAt, isDeleted, releasedAt } = data;
+        let { title, excerpt, userId, ISBN, category, subcategory, reviews, deletedAt, isDeleted, releasedAt, bookCover } = data;
 
         if (Object.keys(data).length == 0) {
             return res.status(400).send({ status: false, msg: "please provide some data to create user" })
@@ -72,7 +72,11 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, msg: "please provide Valid Date" })
         }
 
-        let bookdata = { title, excerpt, userId, ISBN, category, subcategory, reviews, deletedAt, isDeleted, releasedAt }
+        if(!isValid(bookCover)){
+            return res.status(400).send({status: false, msg: "bookCover is compulsory"})
+        }
+
+        let bookdata = { title, excerpt, userId, ISBN, category, subcategory, reviews, deletedAt, isDeleted, releasedAt, bookCover }
         let saveBook = await bookModel.create(bookdata);
         return res.status(201).send({ status: true, msg: "book created successfully", data: saveBook })
     }
