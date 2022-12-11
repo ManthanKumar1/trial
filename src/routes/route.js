@@ -1,20 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const {createAdmin, login} = require("../controllers/adminController")
+const {createStudent, getStudentsByParams, getStudentsByQuery, updateStudent, deleteStudent} = require("../controllers/studentController")
 
-const authorController = require('../controllers/authorController')
-const bookController = require('../controllers/bookController')
-const publisherController = require('../controllers/publisherController')
 
-// Author api
-router.post('/authors', authorController.createAuthor)
-router.get('/authors/:authorId', authorController.fetchAuthorProfile)
+router.post('/createAdmin', createAdmin)
+router.post('/login', login)
 
-// Book api
-router.post('/books', bookController.createBook)
-router.get('/books', bookController.getBooks)
-
-// Publisher api
-router.post('/publishers', publisherController.createPublisher)
-
+router.post('/createStudent', createStudent)
+router.get('/getStudents/:id', getStudentsByParams)
+router.get('/getStudent', getStudentsByQuery)
+router.put('/updateStudent', updateStudent)
+router.delete('/deleteStudent', deleteStudent)
 
 module.exports = router;
