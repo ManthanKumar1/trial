@@ -8,7 +8,7 @@ const isValid = function(value){
 
 const isValidNumber = function(value){
     if(!value || typeof value === "undefined" || value === null || typeof value != 'number') return false
-    if(typeof value === "number" && value.trim().length === 0 ) return false
+    if(typeof value === "number" && value.length === 0 ) return false
     return true
 }
 

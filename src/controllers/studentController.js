@@ -46,7 +46,7 @@ const createStudent = async function (req, res) {
     const findStudent = await studentModel.findOne({ firstName: firstName, lastName: lastName, subject: subject, adminId: adminId, isDeleted: false })
     if (findStudent) {
       let admin = findStudent.adminId
-      if (admin != req.decode.adminId) {
+      if (admin != req.token.adminId) {
         return res.status(403).send({ status: false, message: "you are not Authorized person" })
       }
     
@@ -75,6 +75,12 @@ const getStudentsByParams = async function (req, res) {
     if (!findStudent) {
       return res.status(404).send({ status: false, message: "Student not found with this id" })
     }
+    // if (findStudent) {
+    //   let admin = findStudent.adminId
+    //   if (admin != req.token.adminId) {
+    //     return res.status(403).send({ status: false, message: "you are not Authorized person" })
+    //   }
+    // }
 
     return res.status(200).send({ status: true, message: "Student's Data", data: findStudent })
 
@@ -82,6 +88,7 @@ const getStudentsByParams = async function (req, res) {
     return res.status(500).send({ status: false, message: error.message })
   }
 }
+
 
 const getStudentsByQuery = async function (req, res) {
   try {
@@ -93,6 +100,9 @@ const getStudentsByQuery = async function (req, res) {
     }
 
     const findData = await studentModel.find({ firstName: firstName, subject: subject, isDeleted: false })
+    if(!findData){
+      return res.status(404).send({status: false, message: "Student not found"})
+    }
     return res.status(200).send({ status: true, message: "Student's Data", data: findData })
 
   } catch (error) {
@@ -110,12 +120,12 @@ const updateStudent = async function (req, res) {
     if (Object.keys(data).length == 0) {
       return res.status(400).send({ status: false, message: "Please provide some data to update the student details" })
     }
-    let check = await studentModel.find({ _id: id, isDeleted: false })
+    let check = await studentModel.findOne({ _id: id, isDeleted: false })
     if (!check) {
       return res.status(404).send({ status: false, message: "Student not found" })
     }
     let admin = check.adminId
-    if (admin != req.decode.adminId) {
+    if (admin != req.token.adminId) {
       return res.status(403).send({ status: false, message: "you are not Authorized person" })
     }
 
@@ -126,7 +136,7 @@ const updateStudent = async function (req, res) {
     }
     let newMarks = oldMarks + marks
     let updateStudent = await studentModel.findOneAndUpdate({ _id: id }, { $set: { marks: newMarks } }, { new: true })
-    return res.status(200).send({ status: true, message: "Student's details updated successfully", data: updateStudentDetails })
+    return res.status(200).send({ status: true, message: "Student's details updated successfully", data: updateStudent })
 
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message })
@@ -139,16 +149,16 @@ const deleteStudent = async function (req, res) {
     if (!isValidObjectId(id)) {
       return res.status(400).send({ status: false, message: "Please provide valid id" })
     }
-    let check = await studentModel.find({ _id: id, isDeleted: false })
+    let check = await studentModel.findOne({ _id: id, isDeleted: false })
     if (!check) {
       return res.status(404).send({ status: false, message: "Student not found" })
     }
     let admin = check.adminId
-    if (admin != req.decode.adminId) {
+    if (admin != req.token.adminId) {
       return res.status(403).send({ status: false, message: "you are not Authorized person" })
     }
 
-    const deleteStudents = await studentModel.findOneAndUpdate({ _id: id, isDeleted: false }, { $set: { isDeleted: true, deletedAt: Date.now } }, { new: true })
+    const deleteStudents = await studentModel.findOneAndUpdate({ _id: id, isDeleted: false }, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
     if (!deleteStudents) {
       return res.status(404).send({ status: false, message: "Student not found" })
     }

@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
 const adminModel = require('../models/adminModel')
-const { isValidObjectId } = require('../validators/validator')
 
 
 const authentication = async function (req, res, next) {

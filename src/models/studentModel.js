@@ -19,8 +19,7 @@ const studentSchema = new mongoose.Schema({
   },
   marks: {
     type: Number,
-    required: true,
-    trim: true
+    required: true
   },
   adminId: {
     type: ObjectId,
